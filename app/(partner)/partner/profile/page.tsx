@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import type { User } from "@/lib/types";
 import { profileSchema, type ProfileFormInput } from "@/lib/validators/profile";
 import { authApi, profileApi, partnerApi } from "@/lib/api/endpoints";
 import { useAuthStore } from "@/lib/stores/auth-store";
@@ -73,9 +74,10 @@ export default function PartnerProfilePage() {
       if (data.password) payload.password = data.password;
       return profileApi.update(payload).then((r) => r.data);
     },
-    onSuccess: (updated) => {
-      setUser(updated);
-      queryClient.setQueryData(["me"], updated);
+    onSuccess: (updated: { success?: boolean; user?: User }) => {
+      const userData = updated?.user ?? updated;
+      setUser(userData as User);
+      queryClient.setQueryData(["me"], userData);
       form.reset({ ...form.getValues(), password: "", confirmPassword: "" });
       toast.success(t("profile.profileUpdated"));
     },
