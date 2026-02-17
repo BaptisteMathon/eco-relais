@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eco-Relais Dashboard (Frontend)
 
-## Getting Started
+Production-ready Next.js dashboard for the Eco-Relais hyperlocal delivery platform.
 
-First, run the development server:
+## Project documentation
+
+- **Project overview & codebase guide:** `docs/PROJECT.md`
+
+## Tech stack
+
+- **Next.js 14+** (App Router) + TypeScript
+- **shadcn/ui** (Dashboard-style components)
+- **Tailwind CSS** (v4)
+- **React Hook Form** + **Zod** validation
+- **TanStack Query** for API calls and caching
+- **Zustand** for auth state
+- **Google Maps API** (Places + Maps)
+- **next-qrcode** / **qrcode.react** for QR display, **html5-qrcode** for scanning
+- **Stripe** (Elements / Checkout)
+- **Lucide React** icons
+- **next-themes** for dark mode
+
+## Setup
 
 ```bash
+npm install
+cp .env.example .env.local
+# Edit .env.local: set NEXT_PUBLIC_API_URL and NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). You’ll be redirected to `/login`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Auth:** `/login`, `/register` (multi-step: role → details → address)
+- **Client:** `/client/dashboard`, `/client/new-mission`, `/client/missions`, `/client/missions/[id]`, `/client/payments`, `/client/profile`
+- **Partner:** `/partner/dashboard`, `/partner/available`, `/partner/missions`, `/partner/earnings`, `/partner/profile`
+- **Admin:** `/admin/dashboard`, `/admin/users`, `/admin/missions`, `/admin/disputes`, `/admin/settings`
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+- Protected routes (client-side auth check + API JWT)
+- TanStack Query with 30s polling for mission status where needed
+- Optimistic updates for mission status changes
+- Google Maps: address autocomplete (register, new mission, profile) and mission maps
+- QR: display for client mission detail; scanner for partner collect/deliver
+- Stripe: checkout redirect on mission create; partner Connect onboarding and payout
+- Forms validated with Zod; toasts for actions; loading skeletons; error boundary and 404
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Env vars
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_API_URL` | Backend API base URL (e.g. `http://localhost:3001/api`) |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps/Places API key |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | (Optional) Stripe publishable key for client-side |
 
-## Deploy on Vercel
+## Testing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Unit and component tests use **Vitest** and **React Testing Library**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run test        # single run
+npm run test:watch # watch mode
+```
+
+Tests cover: `lib/utils` (cn), `lib/utils/format` (formatCurrency, formatDate, formatDistance), `lib/validators/auth` (login/register schemas), `lib/stores/auth-store`, and the login page (form and register link).
+
+## Build
+
+```bash
+npm run build
+npm start
+```
