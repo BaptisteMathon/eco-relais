@@ -2,6 +2,8 @@
 
 Production-ready Next.js dashboard for the Eco-Relais hyperlocal delivery platform.
 
+**Development:** The `dev` branch is the integration branch; feature branches are merged here with `--no-ff`. Do not push to `main` from this workflow.
+
 ## Project documentation
 
 - **Project overview & codebase guide:** `docs/PROJECT.md`
