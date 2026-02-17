@@ -1,73 +1,73 @@
 # Eco-Relais Dashboard (Frontend)
 
-Production-ready Next.js dashboard for the Eco-Relais hyperlocal delivery platform.
+Application Next.js pour la plateforme de livraison hyperlocale **Eco-Relais**.
 
-**Development:** The `dev` branch is the integration branch; feature branches are merged here with `--no-ff`. Do not push to `main` from this workflow.
+**Développement :** La branche `dev` est la branche d’intégration ; les branches de fonctionnalités y sont fusionnées avec `--no-ff`. Ne pas pousser sur `main` dans ce workflow.
 
-## Project documentation
+## Documentation du projet
 
-- **Project overview & codebase guide:** `docs/PROJECT.md`
+- **Vue d’ensemble et guide du code :** `docs/PROJECT.md`
 
-## Tech stack
+## Stack technique
 
 - **Next.js 14+** (App Router) + TypeScript
-- **shadcn/ui** (Dashboard-style components)
+- **shadcn/ui** (composants type dashboard)
 - **Tailwind CSS** (v4)
-- **React Hook Form** + **Zod** validation
-- **TanStack Query** for API calls and caching
-- **Zustand** for auth state
+- **React Hook Form** + validation **Zod**
+- **TanStack Query** pour les appels API et le cache
+- **Zustand** pour l’état d’authentification
 - **Google Maps API** (Places + Maps)
-- **next-qrcode** / **qrcode.react** for QR display, **html5-qrcode** for scanning
+- **next-qrcode** / **qrcode.react** pour l’affichage des QR, **html5-qrcode** pour le scan
 - **Stripe** (Elements / Checkout)
-- **Lucide React** icons
-- **next-themes** for dark mode
+- **Lucide React** (icônes)
+- **next-themes** (mode sombre)
 
-## Setup
+## Installation et démarrage
 
 ```bash
 npm install
 cp .env.example .env.local
-# Edit .env.local: set NEXT_PUBLIC_API_URL and NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+# Éditer .env.local : NEXT_PUBLIC_API_URL et NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). You’ll be redirected to `/login`.
+Ouvrir [http://localhost:3000](http://localhost:3000). Redirection vers `/login`.
 
 ## Routes
 
-- **Auth:** `/login`, `/register` (multi-step: role → details → address)
-- **Client:** `/client/dashboard`, `/client/new-mission`, `/client/missions`, `/client/missions/[id]`, `/client/payments`, `/client/profile`
-- **Partner:** `/partner/dashboard`, `/partner/available`, `/partner/missions`, `/partner/earnings`, `/partner/profile`
-- **Admin:** `/admin/dashboard`, `/admin/users`, `/admin/missions`, `/admin/disputes`, `/admin/settings`
+- **Auth :** `/login`, `/register` (inscription en plusieurs étapes : rôle → infos → adresse)
+- **Client :** `/client/dashboard`, `/client/new-mission`, `/client/missions`, `/client/missions/[id]`, `/client/payments`, `/client/profile`
+- **Partenaire :** `/partner/dashboard`, `/partner/available`, `/partner/missions`, `/partner/earnings`, `/partner/profile`
+- **Admin :** `/admin/dashboard`, `/admin/users`, `/admin/missions`, `/admin/disputes`, `/admin/settings`
 
-## Features
+## Fonctionnalités
 
-- Protected routes (client-side auth check + API JWT)
-- TanStack Query with 30s polling for mission status where needed
-- Optimistic updates for mission status changes
-- Google Maps: address autocomplete (register, new mission, profile) and mission maps
-- QR: display for client mission detail; scanner for partner collect/deliver
-- Stripe: checkout redirect on mission create; partner Connect onboarding and payout
-- Forms validated with Zod; toasts for actions; loading skeletons; error boundary and 404
+- Routes protégées (vérification auth côté client + JWT API)
+- TanStack Query avec polling 30 s pour le statut des missions quand nécessaire
+- Mises à jour optimistes pour les changements de statut de mission
+- Google Maps : autocomplétion d’adresse (inscription, nouvelle mission, profil) et cartes des missions
+- QR : affichage pour le détail mission client ; scanner pour collecte/livraison partenaire
+- Stripe : redirection Checkout à la création de mission ; onboarding Connect et paiement partenaire
+- Formulaires validés avec Zod ; toasts pour les actions ; squelettes de chargement ; error boundary et 404
 
-## Env vars
+## Variables d’environnement
 
 | Variable | Description |
 |----------|-------------|
-| `NEXT_PUBLIC_API_URL` | Backend API base URL (e.g. `http://localhost:3001/api`) |
-| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps/Places API key |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | (Optional) Stripe publishable key for client-side |
+| `NEXT_PUBLIC_API_URL` | URL de base de l’API (ex. `http://localhost:3001/api`) |
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Clé API Google Maps/Places |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | (Optionnel) Clé Stripe publique côté client |
 
-## Testing
+## Tests
 
-Unit and component tests use **Vitest** and **React Testing Library**.
+Tests unitaires et de composants avec **Vitest** et **React Testing Library**.
 
 ```bash
-npm run test        # single run
-npm run test:watch # watch mode
+npm run test        # une exécution
+npm run test:watch  # mode watch
 ```
 
-Tests cover: `lib/utils` (cn), `lib/utils/format` (formatCurrency, formatDate, formatDistance), `lib/validators/auth` (login/register schemas), `lib/stores/auth-store`, and the login page (form and register link).
+Couverture : `lib/utils` (cn), `lib/utils/format` (formatCurrency, formatDate, formatDistance), `lib/validators/auth` (schémas login/register), `lib/stores/auth-store`, et la page de connexion (formulaire et lien inscription).
 
 ## Build
 
