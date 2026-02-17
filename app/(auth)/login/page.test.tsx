@@ -40,17 +40,15 @@ describe("LoginPage", () => {
 
   it("renders sign in form with email and password fields", () => {
     render(<LoginPage />, { wrapper });
-    expect(
-      screen.getByText(/enter your email and password/i)
-    ).toBeInTheDocument();
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /sign in/i })).toBeInTheDocument();
+    expect(screen.getByText("auth.signInDescription")).toBeInTheDocument();
+    expect(screen.getByLabelText("auth.email")).toBeInTheDocument();
+    expect(screen.getByLabelText("auth.password")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "auth.signIn" })).toBeInTheDocument();
   });
 
   it("renders link to register", () => {
     render(<LoginPage />, { wrapper });
-    expect(screen.getByRole("link", { name: /register/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "auth.register" })).toHaveAttribute(
       "href",
       "/register"
     );
