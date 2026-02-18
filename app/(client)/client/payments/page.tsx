@@ -39,7 +39,7 @@ export default function ClientPaymentsPage() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold tracking-tight">{t("nav.payments")}</h2>
+      <h2 className="text-trust-blue font-bold tracking-tight">{t("nav.payments")}</h2>
       <Card>
         <CardHeader>
           <CardTitle>{t("clientPayments.totalSpent")}</CardTitle>

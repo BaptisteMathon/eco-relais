@@ -92,7 +92,7 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
     <Sidebar>
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <Link href={role === "client" ? "/client/dashboard" : role === "partner" ? "/partner/dashboard" : "/admin/dashboard"} className="flex items-center gap-2 font-semibold">
-          <Package className="size-6 text-primary" />
+          <img src="/EcoRelais.png" alt="Logo" className="size-10" />
           <span>{t(titleKey)}</span>
         </Link>
       </SidebarHeader>
