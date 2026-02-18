@@ -245,7 +245,7 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
-              <div className="flex gap-2">
+              <div className="mt-5 flex gap-2">
                 <Button type="button" variant="outline" onClick={() => setStep(1)}>
                   {t("common.back")}
                 </Button>
