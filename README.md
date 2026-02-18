@@ -78,7 +78,6 @@ npm start
 
 ## Capture d'écran du site
 
-```markdown
 ### Dashboard
 ![Dashboard](public/Dashboard.png)
 
@@ -93,6 +92,5 @@ npm start
 
 ### Profil
 ![Profil](public/Profil.png)
-```
 
 
