@@ -26,6 +26,7 @@ import {
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { useTranslation } from "@/lib/i18n";
 import type { LucideIcon } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import {
   LayoutDashboard,
   Package,
@@ -116,6 +117,35 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t border-sidebar-border p-2">
+
+        <SidebarGroup className="p-0">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <SidebarMenuButton size="sm" className="text-muted-foreground">
+                      <ShieldCheck className="size-4" />
+                      <span>Informations légales</span>
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent side="right" align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link href="/client/cgu">CGU</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/client/cgv">CGV</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/client/rgpd">RGPD</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex w-full items-center gap-2 rounded-md p-2 hover:bg-sidebar-accent">
