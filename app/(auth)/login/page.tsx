@@ -93,9 +93,10 @@ export default function LoginPage() {
               )}
             />
           </CardContent>
-          <CardFooter className="flex flex-col gap-4">
+          <CardFooter className="flex flex-col gap-4 ">
             <Button
               type="submit"
+              // className="w-full bg-[#2D5A27]"
               className="w-full"
               disabled={loginMutation.isPending}
             >
