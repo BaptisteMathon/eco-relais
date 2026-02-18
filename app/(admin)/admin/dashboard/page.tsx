@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -10,18 +11,35 @@ import { formatCurrency } from "@/lib/utils/format";
 import { useTranslation } from "@/lib/i18n";
 import { Users, Package, DollarSign, TrendingUp } from "lucide-react";
 
-const growthData = [
-  { month: "Jan", users: 40, revenue: 240 },
-  { month: "Feb", users: 65, revenue: 380 },
-  { month: "Mar", users: 88, revenue: 520 },
-];
+function formatMonthLabel(ym: string, locale: string): string {
+  const [y, m] = ym.split("-").map(Number);
+  const date = new Date(y, m - 1, 1);
+  return date.toLocaleString(locale === "fr" ? "fr-FR" : "en-US", { month: "short" });
+}
 
 export default function AdminDashboardPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { data: stats, isLoading } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: () => adminApi.stats().then((r) => r.data),
   });
+
+  const chartData = useMemo(() => {
+    const growth = stats?.growth ?? [];
+    return growth.map((row) => ({
+      ...row,
+      month: formatMonthLabel(row.month, locale),
+    }));
+  }, [stats?.growth, locale]);
+
+  const growthPercent = useMemo(() => {
+    const g = stats?.growth ?? [];
+    if (g.length < 2) return null;
+    const prev = g[g.length - 2].revenue;
+    const curr = g[g.length - 1].revenue;
+    if (prev === 0) return null;
+    return Math.round(((curr - prev) / prev) * 100);
+  }, [stats?.growth]);
 
   if (isLoading) {
     return (
@@ -77,7 +95,9 @@ export default function AdminDashboardPage() {
             <TrendingUp className="text-muted-foreground size-4" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+12%</div>
+            <div className="text-2xl font-bold">
+              {growthPercent != null ? (growthPercent >= 0 ? `+${growthPercent}%` : `${growthPercent}%`) : "—"}
+            </div>
             <p className="text-muted-foreground text-xs">{t("adminDashboard.vsLastMonth")}</p>
           </CardContent>
         </Card>
@@ -95,7 +115,7 @@ export default function AdminDashboardPage() {
             }}
             className="h-64 w-full"
           >
-            <BarChart data={growthData}>
+            <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
               <XAxis dataKey="month" className="text-xs" />
               <ChartTooltip content={<ChartTooltipContent />} />

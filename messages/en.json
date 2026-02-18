@@ -26,6 +26,14 @@
     "partnerTitle": "Partner",
     "adminTitle": "Admin"
   },
+  "metadata": {
+    "title": "Eco-Relais | Hyperlocal Delivery",
+    "titleTemplate": "%s | Eco-Relais",
+    "description": "Eco-Relais - Sustainable hyperlocal package delivery. Send and receive packages with local partners.",
+    "openGraphTitle": "Eco-Relais | Hyperlocal Delivery",
+    "openGraphDescription": "Sustainable hyperlocal package delivery platform",
+    "keywords": ["delivery", "packages", "hyperlocal", "sustainable delivery", "eco", "sustainable", "local delivery", "parcel delivery"]
+  },
   "auth": {
     "signIn": "Sign in",
     "signingIn": "Signing in…",
@@ -239,7 +247,7 @@
     "growth": "Growth",
     "vsLastMonth": "vs last month",
     "overview": "Overview",
-    "sampleGrowthData": "Sample growth data"
+    "sampleGrowthData": "Last 6 months"
   },
   "adminUsers": {
     "name": "Name",

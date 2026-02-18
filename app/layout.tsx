@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { QueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { QueryProvider } from "@/components/providers/query-provider";
 import { AuthSync } from "@/components/providers/auth-sync";
-import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 import { I18nProvider } from "@/lib/i18n";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,32 +19,45 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Eco-Relais | Livraison hyperlocale",
-    template: "%s | Eco-Relais",
-  },
-  description:
-    "Eco-Relais - Livraison de colis hyperlocale et durable. Envoyez et recevez des colis avec des partenaires de proximité.",
-  keywords: ["livraison", "hyperlocal", "eco", "durable", "colis", "delivery", "sustainable", "packages"],
-  openGraph: {
-    title: "Eco-Relais | Livraison hyperlocale",
-    description: "Plateforme de livraison de colis durable et de proximité",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const locale = (cookieStore.get("eco_relais_locale")?.value as "fr" | "en") ?? "fr";
+  const messages =
+    locale === "en"
+      ? (await import("@/messages/en.json")).default
+      : (await import("@/messages/fr.json")).default;
+  const m = (messages as {
+    metadata: {
+      title: string;
+      titleTemplate: string;
+      description: string;
+      openGraphTitle: string;
+      openGraphDescription: string;
+      keywords: string[];
+    };
+  }).metadata;
+  return {
+    title: { default: m.title, template: m.titleTemplate },
+    description: m.description,
+    keywords: m.keywords,
+    openGraph: { title: m.openGraphTitle, description: m.openGraphDescription },
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const locale = (cookieStore.get("eco_relais_locale")?.value as "fr" | "en") ?? "fr";
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <I18nProvider>
-          <ThemeProvider>
+        <ThemeProvider>
+          <I18nProvider>
             <QueryProvider>
               <AuthSync>
                 <TooltipProvider delayDuration={0}>
@@ -52,8 +66,8 @@ export default function RootLayout({
                 </TooltipProvider>
               </AuthSync>
             </QueryProvider>
-          </ThemeProvider>
-        </I18nProvider>
+          </I18nProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

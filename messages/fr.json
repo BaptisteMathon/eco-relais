@@ -26,6 +26,14 @@
     "partnerTitle": "Partenaire",
     "adminTitle": "Admin"
   },
+  "metadata": {
+    "title": "Eco-Relais | Livraison hyperlocale",
+    "titleTemplate": "%s | Eco-Relais",
+    "description": "Eco-Relais - Livraison de colis hyperlocale durable. Envoyez et recevez des colis avec des partenaires de proximité.",
+    "openGraphTitle": "Eco-Relais | Livraison hyperlocale",
+    "openGraphDescription": "Plateforme de livraison de colis hyperlocale durable",
+    "keywords": ["livraison", "colis", "hyperlocal", "livraison durable", "proximité", "eco", "durable", "livraison de colis"]
+  },
   "auth": {
     "signIn": "Connexion",
     "signingIn": "Connexion…",
@@ -239,7 +247,7 @@
     "growth": "Croissance",
     "vsLastMonth": "vs mois dernier",
     "overview": "Aperçu",
-    "sampleGrowthData": "Données de croissance (exemple)"
+    "sampleGrowthData": "Données des 6 derniers mois"
   },
   "adminUsers": {
     "name": "Nom",

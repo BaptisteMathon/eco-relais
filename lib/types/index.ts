@@ -96,3 +96,19 @@ export interface Dispute {
   created_at: string;
   resolved_at?: string | null;
 }
+
+/** One bucket of admin stats growth (dashboard chart + growth % KPI). */
+export interface AdminStatsGrowthPoint {
+  month: string;
+  users: number;
+  revenue: number;
+}
+
+/** Admin dashboard stats: aggregates + time-series for chart and MoM growth. */
+export interface AdminStatsResponse {
+  success?: boolean;
+  total_users: number;
+  active_missions: number;
+  revenue: number;
+  growth?: AdminStatsGrowthPoint[];
+}
