@@ -7,6 +7,7 @@ import type {
   PaginatedResponse,
   AvailableMission,
   Dispute,
+  AdminStatsResponse,
 } from "@/lib/types";
 
 // Backend base path: /api (see backend/src/routes/index.ts)
@@ -135,12 +136,5 @@ export const adminApi = {
   disputes: () => api.get<Dispute[]>("/admin/disputes"),
   resolveDispute: (disputeId: string, resolution: string) =>
     api.patch(`/admin/disputes/${disputeId}/resolve`, { resolution }),
-  stats: () =>
-    api.get<{
-      success?: boolean;
-      total_users: number;
-      active_missions: number;
-      revenue: number;
-      growth?: Record<string, number>;
-    }>("/admin/stats"),
+  stats: () => api.get<AdminStatsResponse>("/admin/stats"),
 };

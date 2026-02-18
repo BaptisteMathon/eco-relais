@@ -7,7 +7,13 @@ import en from "@/messages/en.json";
 export type Locale = "fr" | "en";
 
 const STORAGE_KEY = "eco_relais_locale";
+const COOKIE_KEY = "eco_relais_locale";
 const DEFAULT_LOCALE: Locale = "fr";
+
+function setLocaleCookie(locale: Locale) {
+  if (typeof document === "undefined") return;
+  document.cookie = `${COOKIE_KEY}=${locale};path=/;max-age=31536000;SameSite=Lax`;
+}
 
 const messages: Record<Locale, Record<string, unknown>> = { fr: fr as Record<string, unknown>, en: en as Record<string, unknown> };
 
@@ -36,7 +42,10 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as Locale | null;
-      if (stored === "fr" || stored === "en") setLocaleState(stored);
+      if (stored === "fr" || stored === "en") {
+        setLocaleState(stored);
+        setLocaleCookie(stored);
+      }
     } catch {
       // ignore
     }
@@ -47,6 +56,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     setLocaleState(next);
     try {
       localStorage.setItem(STORAGE_KEY, next);
+      setLocaleCookie(next);
     } catch {
       // ignore
     }
