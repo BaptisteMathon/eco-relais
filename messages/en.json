@@ -168,7 +168,11 @@
     "stats": "Statistics",
     "totalUsers": "Total users",
     "activeMissions": "Active missions",
-    "revenue": "Revenue"
+    "revenue": "Revenue",
+    "showingXOfY": "Showing {from}–{to} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "perPage": "Per page"
   },
   "profile": {
     "firstName": "First name",
