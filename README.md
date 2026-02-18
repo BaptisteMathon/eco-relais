@@ -75,3 +75,24 @@ Couverture : `lib/utils` (cn), `lib/utils/format` (formatCurrency, formatDate, f
 npm run build
 npm start
 ```
+
+## Capture d'écran du site
+
+```markdown
+### Dashboard
+![Dashboard](/public/dashboard.png)
+
+### Nouvelle Mission
+![Nouvelle Mission](/public/nouvelle-mission.png)
+
+### Missions
+![Missions](/public/missions.png)
+
+### Paiement
+![Paiement](/public/paiement.png)
+
+### Profil
+![Profil](/public/profil.png)
+```
+
+
