@@ -26,30 +26,18 @@ import { adminApi } from "@/lib/api/endpoints";
 import { formatDate } from "@/lib/utils/format";
 import { useTranslation } from "@/lib/i18n";
 
-// Mock disputes if API returns empty
-const MOCK_DISPUTES = [
-  {
-    id: "d1",
-    mission_id: "m1",
-    raised_by: "user-1",
-    reason: "Package not delivered on time",
-    status: "open" as const,
-    created_at: new Date().toISOString(),
-  },
-];
-
 export default function AdminDisputesPage() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [resolveId, setResolveId] = useState<string | null>(null);
   const [resolution, setResolution] = useState("");
 
-  const { data: disputes = [], isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["admin-disputes"],
-    queryFn: () => adminApi.disputes().then((r) => r.data),
+    queryFn: () => adminApi.disputes().then((r) => r.data?.disputes ?? []),
   });
 
-  const list = disputes.length > 0 ? disputes : MOCK_DISPUTES;
+  const list = data ?? [];
 
   const resolveMutation = useMutation({
     mutationFn: ({ id, resolution: res }: { id: string; resolution: string }) =>

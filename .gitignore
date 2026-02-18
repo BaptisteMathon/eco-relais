@@ -47,3 +47,6 @@ coverage
 
 # Misc
 *.pem
+.githooks/README.md
+.githooks/commit-msg
+.env.example

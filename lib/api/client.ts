@@ -1,4 +1,5 @@
 import axios, { type AxiosError } from "axios";
+import { touchActivity } from "@/lib/session-idle";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
 
@@ -13,6 +14,7 @@ api.interceptors.request.use((config) => {
     const token = localStorage.getItem("eco_relais_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      touchActivity();
     }
   }
   return config;

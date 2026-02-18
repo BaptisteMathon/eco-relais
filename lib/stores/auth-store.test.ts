@@ -8,7 +8,7 @@ vi.mock("@/lib/api/client", () => ({
 
 describe("auth-store", () => {
   beforeEach(() => {
-    useAuthStore.setState({ user: null, token: null });
+    useAuthStore.setState({ user: null, token: null, lastActivityAt: null });
   });
 
   it("starts with null user and token", () => {

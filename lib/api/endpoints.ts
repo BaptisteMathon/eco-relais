@@ -133,8 +133,8 @@ export const adminApi = {
     api.get<PaginatedResponse<Mission>>("/admin/missions", { params }),
   missionAction: (missionId: string, action: "cancel" | "resolve") =>
     api.patch(`/admin/missions/${missionId}/${action}`),
-  disputes: () => api.get<Dispute[]>("/admin/disputes"),
+  disputes: () => api.get<{ success: boolean; disputes: Dispute[] }>("/admin/disputes"),
   resolveDispute: (disputeId: string, resolution: string) =>
-    api.patch(`/admin/disputes/${disputeId}/resolve`, { resolution }),
+    api.patch<{ success: boolean; dispute: Dispute }>(`/admin/disputes/${disputeId}/resolve`, { resolution }),
   stats: () => api.get<AdminStatsResponse>("/admin/stats"),
 };

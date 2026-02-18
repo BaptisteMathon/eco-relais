@@ -29,17 +29,27 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { adminApi } from "@/lib/api/endpoints";
 import { useTranslation } from "@/lib/i18n";
-import { MoreHorizontal, UserX, Trash2 } from "lucide-react";
+import { MoreHorizontal, UserX, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+
+const PAGE_SIZE_OPTIONS = [10, 15, 20] as const;
 
 export default function AdminUsersPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [roleFilter, setRoleFilter] = useState("all");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState<number>(15);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["admin-users", roleFilter === "all" ? undefined : roleFilter],
+    queryKey: ["admin-users", roleFilter === "all" ? undefined : roleFilter, page, limit],
     queryFn: () =>
-      adminApi.users({ role: roleFilter === "all" ? undefined : roleFilter }).then((r) => r.data),
+      adminApi
+        .users({
+          role: roleFilter === "all" ? undefined : roleFilter,
+          page,
+          limit,
+        })
+        .then((r) => r.data),
   });
 
   const suspendMutation = useMutation({
@@ -65,6 +75,22 @@ export default function AdminUsersPage() {
   });
 
   const users = data?.data ?? [];
+  const total = data?.total ?? 0;
+  const currentPage = data?.page ?? 1;
+  const pageLimit = data?.limit ?? limit;
+  const totalPages = Math.max(1, Math.ceil(total / pageLimit));
+  const from = total === 0 ? 0 : (currentPage - 1) * pageLimit + 1;
+  const to = Math.min(currentPage * pageLimit, total);
+
+  const handleRoleChange = (value: string) => {
+    setRoleFilter(value);
+    setPage(1);
+  };
+
+  const handleLimitChange = (value: string) => {
+    setLimit(Number(value));
+    setPage(1);
+  };
 
   return (
     <div className="space-y-6">
@@ -73,17 +99,31 @@ export default function AdminUsersPage() {
         <CardHeader>
           <CardTitle>{t("admin.allUsers")}</CardTitle>
           <CardDescription>{t("admin.manageAccounts")}</CardDescription>
-          <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder={t("admin.role")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("common.all")}</SelectItem>
-              <SelectItem value="client">{t("adminUsers.clientRole")}</SelectItem>
-              <SelectItem value="partner">{t("adminUsers.partnerRole")}</SelectItem>
-              <SelectItem value="admin">{t("adminUsers.adminRole")}</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-wrap items-center gap-4">
+            <Select value={roleFilter} onValueChange={handleRoleChange}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder={t("admin.role")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("common.all")}</SelectItem>
+                <SelectItem value="client">{t("adminUsers.clientRole")}</SelectItem>
+                <SelectItem value="partner">{t("adminUsers.partnerRole")}</SelectItem>
+                <SelectItem value="admin">{t("adminUsers.adminRole")}</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={String(limit)} onValueChange={handleLimitChange}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder={t("admin.perPage")} />
+              </SelectTrigger>
+              <SelectContent>
+                {PAGE_SIZE_OPTIONS.map((n) => (
+                  <SelectItem key={n} value={String(n)}>
+                    {n}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -140,6 +180,39 @@ export default function AdminUsersPage() {
                 ))}
               </TableBody>
             </Table>
+          )}
+          {!isLoading && total > 0 && (
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t pt-4">
+              <p className="text-muted-foreground text-sm">
+                {t("admin.showingXOfY")
+                  .replace("{from}", String(from))
+                  .replace("{to}", String(to))
+                  .replace("{total}", String(total))}
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage <= 1}
+                >
+                  <ChevronLeft className="size-4" />
+                  {t("admin.previous")}
+                </Button>
+                <span className="text-muted-foreground text-sm">
+                  {currentPage} / {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage >= totalPages}
+                >
+                  {t("admin.next")}
+                  <ChevronRight className="size-4" />
+                </Button>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

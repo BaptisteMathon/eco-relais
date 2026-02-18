@@ -168,7 +168,11 @@
     "stats": "Statistiques",
     "totalUsers": "Utilisateurs totaux",
     "activeMissions": "Missions actives",
-    "revenue": "Revenus"
+    "revenue": "Revenus",
+    "showingXOfY": "Affichage {from}–{to} sur {total}",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "perPage": "Par page"
   },
   "profile": {
     "firstName": "Prénom",
