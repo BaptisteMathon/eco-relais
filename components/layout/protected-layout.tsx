@@ -1,5 +1,11 @@
 "use client";
 
+/**
+ * Protected layout: auth is client-side (JWT in localStorage), so we show a single
+ * loading state until the store has rehydrated and user/role are known. This keeps
+ * server and first client paint identical (no hydration mismatch). Redirect to
+ * login or role dashboard runs in useEffect after mount.
+ */
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthStore } from "@/lib/stores/auth-store";
@@ -41,7 +47,7 @@ export function ProtectedLayout({ children, role, title }: ProtectedLayoutProps)
     }
   }, [user, role, isAuthenticated, router]);
 
-  if (typeof window !== "undefined" && (!user || user.role !== role)) {
+  if (!user || user.role !== role) {
     return (
       <div className="flex min-h-svh items-center justify-center">
         <p className="text-muted-foreground">{t("common.loading")}</p>
