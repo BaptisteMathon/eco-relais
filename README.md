@@ -80,19 +80,19 @@ npm start
 
 ```markdown
 ### Dashboard
-![Dashboard](/public/dashboard.png)
+![Dashboard](/public/Dashboard.png)
 
 ### Nouvelle Mission
-![Nouvelle Mission](/public/nouvelle-mission.png)
+![Nouvelle Mission](/public/NouvelleMission.png)
 
 ### Missions
-![Missions](/public/missions.png)
+![Missions](/public/Missions.png)
 
 ### Paiement
-![Paiement](/public/paiement.png)
+![Paiement](/public/Paiement.png)
 
 ### Profil
-![Profil](/public/profil.png)
+![Profil](/public/Profil.png)
 ```
 
 
