@@ -76,6 +76,32 @@ npm run build
 npm start
 ```
 
+## État du MVP (Minimum Viable Product):
+
+Le MVP se concentre sur le flux critique : **Inscription -> création de mission -> Livraison par un voisin**
+
+### Les fonctionnalités Opérationnelles
+* **Authentification & Roles** : Inscription et connexion fonctionnelles pour les rôles Client, Partenaire & Admin
+* **Dépôt de colis** : Formulaire de création de mission
+* **Recherche de missions** : Visualisation des différentes missions disponible
+* **Mes missions** : Visualisation des missions en cours et terminée
+* **Profil utilisateur** : Gestion des informations personnelles de l'utilisateur
+* **Internationalisation** : Support complet du Français et de l'Anglais
+* **Ajout des CGU, CGV et RGPD** : Ajout des mentions légales
+* **Themes** : Implementation d'un thème clair et d'un thème sombre
+
+## En cours de finalisation 
+* **Ajout des paiements** : Ajout des paiements via le partenaire Stripe
+* **Google Maps API** : Implémentation de l'API de Google Maps
+
+### Roadmap (Prévue pour la V2):
+* **Système de messagerie** : Ajout d'un système de messagerie instantanée entre les clients et les partenaires
+* **Système de badges** : Ajout d'un système de badge et de natation pour garandir le sérieux des expéditeurs et renforcer la sérénité des Voisins-Relais
+* **Système de report** : Ajout d'un système de signalement pour les clients et les partenaires
+* **Google Oauth** : Ajout d'un système de connexion avec Google
+* **Notifications** : Ajout d'un système de notifications pour les clients et les partenaires
+
+
 ## Capture d'écran du site
 
 ### Dashboard
