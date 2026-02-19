@@ -90,11 +90,11 @@ Le MVP se concentre sur le flux critique : **Inscription -> création de mission
 * **Ajout des CGU, CGV et RGPD** : Ajout des mentions légales
 * **Themes** : Implementation d'un thème clair et d'un thème sombre
 
-## En cours de finalisation 
+### En cours de finalisation 
 * **Ajout des paiements** : Ajout des paiements via le partenaire Stripe
 * **Google Maps API** : Implémentation de l'API de Google Maps
 
-### Roadmap (Prévue pour la V2):
+## Roadmap (Prévue pour la V2):
 * **Système de messagerie** : Ajout d'un système de messagerie instantanée entre les clients et les partenaires
 * **Système de badges** : Ajout d'un système de badge et de natation pour garandir le sérieux des expéditeurs et renforcer la sérénité des Voisins-Relais
 * **Système de report** : Ajout d'un système de signalement pour les clients et les partenaires
