@@ -196,6 +196,8 @@
     "saving": "Enregistrement…",
     "saveChanges": "Enregistrer les modifications",
     "updateFailed": "Échec de la mise à jour",
+    "emailReadOnly": "L'email ne peut pas être modifié.",
+    "addressOptional": "Optionnel",
     "payoutSettings": "Paramètres de paiement",
     "connectStripeReceivePayments": "Connectez votre compte Stripe pour recevoir les paiements",
     "stripeConnected": "Stripe connecté",

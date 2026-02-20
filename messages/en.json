@@ -196,6 +196,8 @@
     "saving": "Saving…",
     "saveChanges": "Save changes",
     "updateFailed": "Update failed",
+    "emailReadOnly": "Email cannot be changed.",
+    "addressOptional": "Optional",
     "payoutSettings": "Payout settings",
     "connectStripeReceivePayments": "Connect your Stripe account to receive payments",
     "stripeConnected": "Stripe connected",

@@ -67,6 +67,7 @@ const adminNav: NavItem[] = [
   { titleKey: "nav.users", href: "/admin/users", icon: Users },
   { titleKey: "nav.missions", href: "/admin/missions", icon: ClipboardList },
   { titleKey: "nav.disputes", href: "/admin/disputes", icon: AlertCircle },
+  { titleKey: "nav.profile", href: "/admin/profile", icon: User },
   { titleKey: "nav.settings", href: "/admin/settings", icon: Settings },
 ];
 
