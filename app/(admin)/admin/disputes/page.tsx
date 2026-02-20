@@ -20,17 +20,21 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { adminApi } from "@/lib/api/endpoints";
 import { formatDate } from "@/lib/utils/format";
 import { useTranslation } from "@/lib/i18n";
+import type { Dispute } from "@/lib/types";
+import { Eye } from "lucide-react";
 
 export default function AdminDisputesPage() {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [resolveId, setResolveId] = useState<string | null>(null);
   const [resolution, setResolution] = useState("");
+  const [detailDispute, setDetailDispute] = useState<Dispute | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-disputes"],
@@ -74,7 +78,7 @@ export default function AdminDisputesPage() {
                   <TableHead>{t("admin.reason")}</TableHead>
                   <TableHead>{t("admin.status")}</TableHead>
                   <TableHead>{t("common.created")}</TableHead>
-                  <TableHead className="w-24" />
+                  <TableHead className="w-32" />
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -93,15 +97,25 @@ export default function AdminDisputesPage() {
                     </TableCell>
                     <TableCell>{formatDate(d.created_at)}</TableCell>
                     <TableCell>
-                      {d.status !== "resolved" && (
+                      <div className="flex items-center gap-2">
                         <Button
                           size="sm"
-                          variant="outline"
-                          onClick={() => setResolveId(d.id)}
+                          variant="ghost"
+                          onClick={() => setDetailDispute(d)}
                         >
-                          {t("admin.resolve")}
+                          <Eye className="mr-1 size-4" />
+                          {t("common.view")}
                         </Button>
-                      )}
+                        {d.status !== "resolved" && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setResolveId(d.id)}
+                          >
+                            {t("admin.resolve")}
+                          </Button>
+                        )}
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -110,6 +124,55 @@ export default function AdminDisputesPage() {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={!!detailDispute} onOpenChange={(open) => !open && setDetailDispute(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("admin.disputeDetails") || "Dispute details"}</DialogTitle>
+            {detailDispute && (
+              <DialogDescription>
+                {t("clientPayments.missionId")}: {detailDispute.mission_id}
+              </DialogDescription>
+            )}
+          </DialogHeader>
+          {detailDispute && (
+            <div className="grid gap-4 py-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-muted-foreground text-sm font-medium">{t("admin.status")}:</span>
+                <Badge variant={detailDispute.status === "resolved" ? "default" : "secondary"}>{detailDispute.status}</Badge>
+              </div>
+              <div>
+                <span className="text-muted-foreground text-sm font-medium">{t("clientPayments.missionId")}:</span>
+                <p className="font-mono text-sm">{detailDispute.mission_id}</p>
+              </div>
+              <div>
+                <span className="text-muted-foreground text-sm font-medium">{t("admin.reason")}:</span>
+                <p>{detailDispute.reason}</p>
+              </div>
+              <div>
+                <span className="text-muted-foreground text-sm font-medium">{t("common.created")}:</span>
+                <p className="text-sm">{formatDate(detailDispute.created_at)}</p>
+              </div>
+              {detailDispute.status === "resolved" && (
+                <>
+                  {detailDispute.resolution && (
+                    <div>
+                      <span className="text-muted-foreground text-sm font-medium">{t("admin.resolution")}:</span>
+                      <p className="text-sm">{detailDispute.resolution}</p>
+                    </div>
+                  )}
+                  {detailDispute.resolved_at && (
+                    <div>
+                      <span className="text-muted-foreground text-sm font-medium">{t("admin.resolvedAt")}:</span>
+                      <p className="text-sm">{formatDate(detailDispute.resolved_at)}</p>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={!!resolveId} onOpenChange={() => setResolveId(null)}>
         <DialogContent>
