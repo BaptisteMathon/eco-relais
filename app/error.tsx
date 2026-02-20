@@ -28,8 +28,11 @@ export default function Error({
             An error occurred. You can try again or return to the dashboard.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex gap-2">
+        <CardContent className="flex flex-wrap gap-2">
           <Button onClick={reset}>Try again</Button>
+          <Button variant="outline" asChild>
+            <a href="/client/dashboard">Go to dashboard</a>
+          </Button>
           <Button variant="outline" asChild>
             <a href="/login">Go to login</a>
           </Button>

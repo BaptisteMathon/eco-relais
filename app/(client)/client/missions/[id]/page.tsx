@@ -34,17 +34,44 @@ export default function ClientMissionDetailPage({
   const { t } = useTranslation();
   const MISSION_STATUS_LABELS = useMissionStatusLabels();
   const packageSizeLabels = usePackageSizeLabels();
-  const { data: mission, isLoading } = useQuery({
+  const { data: mission, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["mission", id],
     queryFn: () => missionsApi.get(id).then((r) => r.data),
     refetchInterval: 30_000,
   });
 
-  if (isLoading || !mission) {
+  if (isLoading || (!mission && !isError)) {
     return (
       <div className="space-y-6">
         <Skeleton className="h-8 w-48" />
         <Skeleton className="h-64 w-full" />
+      </div>
+    );
+  }
+
+  if (isError) {
+    const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+    return (
+      <div className="space-y-6">
+        <Button variant="ghost" size="icon" asChild>
+          <Link href="/client/missions">
+            <ArrowLeft className="size-4" />
+          </Link>
+        </Button>
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("missionDetail.notFound") || "Mission not found"}</CardTitle>
+            <CardDescription>
+              {message || t("missionDetail.notFoundDescription") || "This mission does not exist or you don't have access."}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button onClick={() => refetch()}>{t("common.tryAgain") || "Try again"}</Button>
+            <Button variant="outline" asChild className="ml-2">
+              <Link href="/client/missions">{t("mission.myMissions") || "My missions"}</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -113,11 +140,11 @@ export default function ClientMissionDetailPage({
           </CardHeader>
           <CardContent>
             <MissionMap
-              pickup={{ lat: mission.pickup_lat, lng: mission.pickup_lng }}
-              delivery={{ lat: mission.delivery_lat, lng: mission.delivery_lng }}
+              pickup={{ lat: Number(mission.pickup_lat), lng: Number(mission.pickup_lng) }}
+              delivery={{ lat: Number(mission.delivery_lat), lng: Number(mission.delivery_lng) }}
               partnerLocation={
                 mission.partner_id
-                  ? { lat: mission.pickup_lat + 0.002, lng: mission.pickup_lng + 0.001 }
+                  ? { lat: Number(mission.pickup_lat) + 0.002, lng: Number(mission.pickup_lng) + 0.001 }
                   : undefined
               }
             />
@@ -183,7 +210,11 @@ export default function ClientMissionDetailPage({
                 <CardDescription>{t("missionDetail.qrCodeDescription")}</CardDescription>
               </CardHeader>
               <CardContent className="flex justify-center">
-                <QRCodeSVG value={mission.qr_code} size={160} level="M" />
+                {mission.qr_code.startsWith("data:") ? (
+                  <img src={mission.qr_code} alt="QR Code" width={160} height={160} className="size-40 object-contain" />
+                ) : (
+                  <QRCodeSVG value={mission.qr_code} size={160} level="M" />
+                )}
               </CardContent>
             </Card>
           )}

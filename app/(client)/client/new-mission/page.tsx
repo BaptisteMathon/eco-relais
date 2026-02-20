@@ -96,7 +96,8 @@ export default function NewMissionPage() {
           return;
         }
       } catch {
-        // no checkout URL - mission created without payment flow
+        // Payments not configured (e.g. STRIPE_SECRET_KEY not set) — mission is still created
+        toast.info(t("mission.paymentsNotConfigured") || "Payments are not configured. You can view your mission below.");
       }
       toast.success(t("mission.missionCreated"));
       router.push(`/client/missions/${id}`);
