@@ -72,4 +72,53 @@ describe("auth-store", () => {
     expect(useAuthStore.getState().user?.first_name).toBe("Updated");
     expect(useAuthStore.getState().token).toBe("jwt");
   });
+
+  it("setAuth sets lastActivityAt", () => {
+    const user = {
+      id: "1",
+      email: "u@test.com",
+      role: "client" as const,
+      first_name: "U",
+      last_name: "T",
+      phone: null,
+      address_lat: null,
+      address_lng: null,
+      verified: true,
+    };
+    const before = Date.now();
+    useAuthStore.getState().setAuth(user, "jwt");
+    const at = useAuthStore.getState().lastActivityAt;
+    expect(at).not.toBeNull();
+    expect((at as number) >= before && (at as number) <= Date.now() + 100).toBe(true);
+  });
+
+  it("touchActivity updates lastActivityAt", () => {
+    useAuthStore.setState({ lastActivityAt: 1000 });
+    useAuthStore.getState().touchActivity();
+    const at = useAuthStore.getState().lastActivityAt;
+    expect(at).not.toBe(1000);
+    expect((at as number) >= Date.now() - 100).toBe(true);
+  });
+
+  it("isIdleExpired returns false when lastActivityAt is null", () => {
+    useAuthStore.setState({ lastActivityAt: null });
+    expect(useAuthStore.getState().isIdleExpired()).toBe(false);
+  });
+
+  it("isIdleExpired returns false when activity was recent", () => {
+    useAuthStore.setState({ lastActivityAt: Date.now() });
+    expect(useAuthStore.getState().isIdleExpired()).toBe(false);
+  });
+
+  it("isIdleExpired returns true when activity was more than 3h ago", () => {
+    const threeHoursMs = 3 * 60 * 60 * 1000;
+    useAuthStore.setState({ lastActivityAt: Date.now() - threeHoursMs - 1000 });
+    expect(useAuthStore.getState().isIdleExpired()).toBe(true);
+  });
+
+  it("logout clears lastActivityAt", () => {
+    useAuthStore.setState({ lastActivityAt: Date.now() });
+    useAuthStore.getState().logout();
+    expect(useAuthStore.getState().lastActivityAt).toBeNull();
+  });
 });

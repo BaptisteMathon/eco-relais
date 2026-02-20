@@ -32,11 +32,12 @@ export function ProtectedLayout({ children, role, title }: ProtectedLayoutProps)
   const router = useRouter();
   const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
+  const hasHydrated = useAuthStore((s) => s._hasHydrated);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !hasHydrated) return;
     if (!isAuthenticated() || !user) {
       router.replace("/login");
       return;
@@ -45,9 +46,16 @@ export function ProtectedLayout({ children, role, title }: ProtectedLayoutProps)
       const base = ROLE_PREFIX[user.role as Role];
       router.replace(base + "/dashboard");
     }
-  }, [user, role, isAuthenticated, router]);
+  }, [user, role, isAuthenticated, router, hasHydrated]);
 
-  if (!user || user.role !== role) {
+  if (!hasHydrated) {
+    return (
+      <div className="flex min-h-svh items-center justify-center">
+        <p className="text-muted-foreground">{t("common.loading")}</p>
+      </div>
+    );
+  }
+  if (!user || !isAuthenticated() || user.role !== role) {
     return (
       <div className="flex min-h-svh items-center justify-center">
         <p className="text-muted-foreground">{t("common.loading")}</p>
