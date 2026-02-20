@@ -102,6 +102,11 @@ export default function PartnerProfilePage() {
         <CardHeader>
           <CardTitle>{t("profile.personalInfo")}</CardTitle>
           <CardDescription>{t("profile.updateNamePhoneAddress")}</CardDescription>
+          {me?.address && (
+            <p className="text-muted-foreground text-sm">
+              {t("profile.savedAddress")}: {me.address}
+            </p>
+          )}
         </CardHeader>
         <CardContent>
           <Form {...form}>
