@@ -163,6 +163,7 @@
     "resolve": "Résoudre",
     "resolveDispute": "Résoudre le litige",
     "resolutionNotes": "Notes de résolution…",
+    "resolution": "Résolution",
     "submitResolution": "Envoyer la résolution",
     "disputeResolved": "Litige résolu",
     "resolveFailed": "Échec de résolution",
@@ -174,7 +175,11 @@
     "showingXOfY": "Affichage {from}–{to} sur {total}",
     "previous": "Précédent",
     "next": "Suivant",
-    "perPage": "Par page"
+    "perPage": "Par page",
+    "client": "Client",
+    "userDetails": "Détails utilisateur",
+    "disputeDetails": "Détails du litige",
+    "resolvedAt": "Résolu le"
   },
   "profile": {
     "firstName": "Prénom",
@@ -281,7 +286,24 @@
   "settings": {
     "platformSettings": "Paramètres de la plateforme",
     "configureGlobalPlaceholder": "Configurer les options globales (placeholder)",
-    "settingsUICanBeExtended": "L'interface peut être étendue avec indicateurs, tarifs et notifications."
+    "settingsUICanBeExtended": "L'interface peut être étendue avec indicateurs, tarifs et notifications.",
+    "apiKeys": "Clés API",
+    "apiKeysDescription": "Les clés sont lues depuis les variables d'environnement. Activez ou désactivez chaque intégration.",
+    "stripeKey": "Clé publique Stripe",
+    "googleMapsKey": "Clé API Google Maps",
+    "notSet": "Non définie",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "useIntegration": "Utiliser l'intégration",
+    "indicators": "Indicateurs",
+    "indicatorsDescription": "Configurer les KPI et indicateurs du tableau de bord.",
+    "indicatorsPlaceholder": "Les indicateurs peuvent être configurés ici.",
+    "tariffs": "Tarifs",
+    "tariffsDescription": "Configurer les prix et règles de commission.",
+    "tariffsPlaceholder": "Les tarifs et commissions peuvent être configurés ici.",
+    "notifications": "Notifications",
+    "notificationsDescription": "Configurer les notifications par e-mail et in-app.",
+    "notificationsPlaceholder": "Les préférences et modèles de notification peuvent être configurés ici."
   },
   "register": {
     "createAccount": "Créer un compte",

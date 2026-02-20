@@ -163,6 +163,7 @@
     "resolve": "Resolve",
     "resolveDispute": "Resolve dispute",
     "resolutionNotes": "Resolution notes…",
+    "resolution": "Resolution",
     "submitResolution": "Submit resolution",
     "disputeResolved": "Dispute resolved",
     "resolveFailed": "Failed to resolve",
@@ -174,7 +175,11 @@
     "showingXOfY": "Showing {from}–{to} of {total}",
     "previous": "Previous",
     "next": "Next",
-    "perPage": "Per page"
+    "perPage": "Per page",
+    "client": "Client",
+    "userDetails": "User details",
+    "disputeDetails": "Dispute details",
+    "resolvedAt": "Resolved at"
   },
   "profile": {
     "firstName": "First name",
@@ -281,7 +286,24 @@
   "settings": {
     "platformSettings": "Platform settings",
     "configureGlobalPlaceholder": "Configure global options (placeholder)",
-    "settingsUICanBeExtended": "Settings UI can be extended with feature flags, pricing, and notifications."
+    "settingsUICanBeExtended": "Settings UI can be extended with feature flags, pricing, and notifications.",
+    "apiKeys": "API keys",
+    "apiKeysDescription": "Keys are read from environment variables. Toggle to enable or disable each integration.",
+    "stripeKey": "Stripe publishable key",
+    "googleMapsKey": "Google Maps API key",
+    "notSet": "Not set",
+    "active": "Active",
+    "inactive": "Inactive",
+    "useIntegration": "Use integration",
+    "indicators": "Indicators",
+    "indicatorsDescription": "Configure platform KPIs and dashboard indicators.",
+    "indicatorsPlaceholder": "Indicator settings can be extended here (e.g. which metrics to show on the admin dashboard).",
+    "tariffs": "Tariffs",
+    "tariffsDescription": "Configure pricing and commission rules.",
+    "tariffsPlaceholder": "Tariff and commission settings can be extended here.",
+    "notifications": "Notifications",
+    "notificationsDescription": "Configure email and in-app notifications.",
+    "notificationsPlaceholder": "Notification preferences and templates can be configured here."
   },
   "register": {
     "createAccount": "Create an account",

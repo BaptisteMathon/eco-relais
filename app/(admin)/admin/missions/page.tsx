@@ -120,7 +120,7 @@ export default function AdminMissionsPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem asChild>
-                            <Link href={`/client/missions/${m.id}`}>{t("common.view")}</Link>
+                            <Link href={`/admin/missions/${m.id}`}>{t("common.view")}</Link>
                           </DropdownMenuItem>
                           {!["delivered", "cancelled"].includes(m.status) && (
                             <>
