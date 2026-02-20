@@ -61,11 +61,11 @@ export default async function RootLayout({
           <I18nProvider>
             <QueryProvider>
               <AuthSync>
-                <SessionIdleProvider>
-                  <TooltipProvider delayDuration={0}>
-                    {children}
-                    <Toaster position="top-right" richColors />
-                  </TooltipProvider>
+<SessionIdleProvider>
+                <TooltipProvider delayDuration={0}>
+                  {children}
+                  <Toaster position="top-right" richColors />
+                </TooltipProvider>
                 </SessionIdleProvider>
               </AuthSync>
             </QueryProvider>

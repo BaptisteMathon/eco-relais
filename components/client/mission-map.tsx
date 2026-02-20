@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
+import { useGoogleMapsLoader } from "@/lib/google-maps-loader";
 import { GOOGLE_MAPS_API_KEY } from "@/lib/constants";
 
 const defaultCenter = { lat: 48.8566, lng: 2.3522 };
@@ -13,9 +14,7 @@ interface MissionMapProps {
 }
 
 export function MissionMap({ pickup, delivery, partnerLocation }: MissionMapProps) {
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-  });
+  const { isLoaded, loadError } = useGoogleMapsLoader();
 
   const center = useMemo(() => ({
     lat: (pickup.lat + delivery.lat) / 2,
