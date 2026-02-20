@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { useMemo, useRef, useEffect } from "react";
+import { GoogleMap, Marker } from "@react-google-maps/api";
+import { useGoogleMapsLoader } from "@/lib/google-maps-loader";
 import { GOOGLE_MAPS_API_KEY } from "@/lib/constants";
 import type { AvailableMission } from "@/lib/types";
 
@@ -10,15 +11,22 @@ interface AvailableMissionsMapProps {
   missions: AvailableMission[];
 }
 
+function hasValidCoords(m: AvailableMission): boolean {
+  const lat = Number(m.pickup_lat);
+  const lng = Number(m.pickup_lng);
+  return Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+}
+
 export function AvailableMissionsMap({ center, missions }: AvailableMissionsMapProps) {
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-  });
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const { isLoaded, loadError } = useGoogleMapsLoader();
+
+  const missionsWithCoords = useMemo(() => missions.filter(hasValidCoords), [missions]);
 
   const bounds = useMemo(() => {
-    if (missions.length === 0) return null;
-    const lats = missions.flatMap((m) => [m.pickup_lat, m.delivery_lat]);
-    const lngs = missions.flatMap((m) => [m.pickup_lng, m.delivery_lng]);
+    if (missionsWithCoords.length === 0) return null;
+    const lats = missionsWithCoords.flatMap((m) => [Number(m.pickup_lat), Number(m.delivery_lat)]);
+    const lngs = missionsWithCoords.flatMap((m) => [Number(m.pickup_lng), Number(m.delivery_lng)]);
     lats.push(center.lat);
     lngs.push(center.lng);
     return {
@@ -27,7 +35,17 @@ export function AvailableMissionsMap({ center, missions }: AvailableMissionsMapP
       east: Math.max(...lngs) + 0.01,
       west: Math.min(...lngs) - 0.01,
     };
-  }, [missions, center]);
+  }, [missionsWithCoords, center]);
+
+  useEffect(() => {
+    if (!bounds || !mapRef.current) return;
+    const map = mapRef.current;
+    const b = new google.maps.LatLngBounds(
+      { lat: bounds.south, lng: bounds.west },
+      { lat: bounds.north, lng: bounds.east }
+    );
+    map.fitBounds(b, 60);
+  }, [bounds]);
 
   if (loadError || !GOOGLE_MAPS_API_KEY) {
     return (
@@ -52,6 +70,7 @@ export function AvailableMissionsMap({ center, missions }: AvailableMissionsMapP
         center={center}
         zoom={14}
         onLoad={(map) => {
+          mapRef.current = map;
           if (bounds) {
             const b = new google.maps.LatLngBounds(
               { lat: bounds.south, lng: bounds.west },
@@ -60,12 +79,15 @@ export function AvailableMissionsMap({ center, missions }: AvailableMissionsMapP
             map.fitBounds(b, 60);
           }
         }}
+        onUnmount={() => {
+          mapRef.current = null;
+        }}
       >
         <Marker position={center} title="You" />
-        {missions.map((m) => (
+        {missionsWithCoords.map((m) => (
           <Marker
             key={m.id}
-            position={{ lat: m.pickup_lat, lng: m.pickup_lng }}
+            position={{ lat: Number(m.pickup_lat), lng: Number(m.pickup_lng) }}
             title={m.package_title}
           />
         ))}
