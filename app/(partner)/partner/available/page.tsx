@@ -190,7 +190,7 @@ export default function PartnerAvailablePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={requestLocation} disabled={locationStatus === "loading"}>
+            <Button onClick={requestLocation} disabled={false}>
               <MapPin className="mr-2 size-4" />
               {t("partnerAvailable.allowLocation")}
             </Button>
