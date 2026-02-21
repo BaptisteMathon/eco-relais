@@ -1,6 +1,11 @@
 import axios, { type AxiosError } from "axios";
+import { touchActivity } from "@/lib/session-idle";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location?.hostname !== "localhost"
+    ? "https://eco-relais-api.vercel.app/api"
+    : "http://localhost:3001/api");
 
 export const api = axios.create({
   baseURL: API_BASE,
@@ -13,17 +18,19 @@ api.interceptors.request.use((config) => {
     const token = localStorage.getItem("eco_relais_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      touchActivity();
     }
   }
   return config;
 });
 
+const AUTH_PERSIST_KEY = "eco_relais_auth";
+
 api.interceptors.response.use(
   (res) => res,
   (err: AxiosError<{ message?: string; errors?: Record<string, string[]> }>) => {
     if (err.response?.status === 401 && typeof window !== "undefined") {
-      localStorage.removeItem("eco_relais_token");
-      localStorage.removeItem("eco_relais_user");
+      clearAuth();
       window.location.href = "/login";
     }
     return Promise.reject(err);
@@ -45,5 +52,6 @@ export function clearAuth(): void {
   if (typeof window !== "undefined") {
     localStorage.removeItem("eco_relais_token");
     localStorage.removeItem("eco_relais_user");
+    localStorage.removeItem(AUTH_PERSIST_KEY);
   }
 }

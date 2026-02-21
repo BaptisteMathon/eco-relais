@@ -18,12 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import type { User } from "@/lib/types";
 import { profileSchema, type ProfileFormInput } from "@/lib/validators/profile";
-import { authApi, profileApi, partnerApi } from "@/lib/api/endpoints";
+import { authApi, profileApi } from "@/lib/api/endpoints";
 import { useAuthStore } from "@/lib/stores/auth-store";
 import { useTranslation } from "@/lib/i18n";
-import { AddressAutocomplete } from "@/components/client/address-autocomplete";
 
-export default function PartnerProfilePage() {
+export default function AdminProfilePage() {
   const queryClient = useQueryClient();
   const { user, setUser } = useAuthStore();
   const { t } = useTranslation();
@@ -52,7 +51,7 @@ export default function PartnerProfilePage() {
         first_name: me.first_name,
         last_name: me.last_name,
         phone: me.phone ?? "",
-        address: me.address ?? "",
+        address: (me as { address?: string }).address ?? "",
         address_lat: me.address_lat ?? undefined,
         address_lng: me.address_lng ?? undefined,
         password: "",
@@ -86,15 +85,6 @@ export default function PartnerProfilePage() {
     },
   });
 
-  const stripeOnboardingMutation = useMutation({
-    mutationFn: () => partnerApi.onboardingLink().then((r) => r.data),
-    onSuccess: (data) => {
-      if (data?.url) window.location.href = data.url;
-      else toast.error(t("profile.onboardingLinkError"));
-    },
-    onError: () => toast.error(t("profile.onboardingLinkError")),
-  });
-
   return (
     <div className="mx-auto max-w-xl space-y-6">
       <h2 className="text-2xl font-bold tracking-tight">{t("common.profile")}</h2>
@@ -102,11 +92,6 @@ export default function PartnerProfilePage() {
         <CardHeader>
           <CardTitle>{t("profile.personalInfo")}</CardTitle>
           <CardDescription>{t("profile.updateNamePhoneAddress")}</CardDescription>
-          {me?.address && (
-            <p className="text-muted-foreground text-sm">
-              {t("profile.savedAddress")}: {me.address}
-            </p>
-          )}
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -142,6 +127,13 @@ export default function PartnerProfilePage() {
                   )}
                 />
               </div>
+              <FormItem>
+                <FormLabel>{t("auth.email")}</FormLabel>
+                <FormControl>
+                  <Input type="email" value={me?.email ?? ""} disabled className="bg-muted" />
+                </FormControl>
+                <p className="text-muted-foreground text-xs">{t("profile.emailReadOnly") || "Email cannot be changed."}</p>
+              </FormItem>
               <FormField
                 control={form.control}
                 name="phone"
@@ -162,14 +154,7 @@ export default function PartnerProfilePage() {
                   <FormItem>
                     <FormLabel>{t("profile.address")}</FormLabel>
                     <FormControl>
-                      <AddressAutocomplete
-                        value={field.value ?? ""}
-                        onChange={field.onChange}
-                        onPlaceSelect={(r) => {
-                          form.setValue("address_lat", r.lat);
-                          form.setValue("address_lng", r.lng);
-                        }}
-                      />
+                      <Input placeholder={t("profile.addressOptional") || "Optional"} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -182,7 +167,7 @@ export default function PartnerProfilePage() {
                   <FormItem>
                     <FormLabel>{t("profile.newPasswordOptional")}</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
+                      <Input type="password" placeholder={t("auth.passwordPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -195,7 +180,7 @@ export default function PartnerProfilePage() {
                   <FormItem>
                     <FormLabel>{t("profile.confirmNewPassword")}</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="••••••••" {...field} />
+                      <Input type="password" placeholder={t("auth.passwordPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -206,21 +191,6 @@ export default function PartnerProfilePage() {
               </Button>
             </form>
           </Form>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("profile.payoutSettings")}</CardTitle>
-          <CardDescription>{t("profile.connectStripeReceivePayments")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button
-            variant="outline"
-            onClick={() => stripeOnboardingMutation.mutate()}
-            disabled={stripeOnboardingMutation.isPending || !!user?.stripe_account_id}
-          >
-            {user?.stripe_account_id ? t("profile.stripeConnected") : t("profile.connectStripeAccount")}
-          </Button>
         </CardContent>
       </Card>
     </div>

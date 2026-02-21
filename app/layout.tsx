@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { AuthSync } from "@/components/providers/auth-sync";
+import { SessionIdleProvider } from "@/components/providers/session-idle-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { I18nProvider } from "@/lib/i18n";
@@ -60,10 +61,12 @@ export default async function RootLayout({
           <I18nProvider>
             <QueryProvider>
               <AuthSync>
+<SessionIdleProvider>
                 <TooltipProvider delayDuration={0}>
                   {children}
                   <Toaster position="top-right" richColors />
                 </TooltipProvider>
+                </SessionIdleProvider>
               </AuthSync>
             </QueryProvider>
           </I18nProvider>

@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { missionsApi } from "@/lib/api/endpoints";
 import { formatDate, formatCurrency } from "@/lib/utils/format";
 import { useTranslation, useMissionStatusLabels, usePackageSizeLabels } from "@/lib/i18n";
-import { ArrowLeft, MessageCircle, Navigation } from "lucide-react";
+import { ArrowLeft, Navigation } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 
 const MissionMap = dynamic(
@@ -22,7 +22,7 @@ const MissionMap = dynamic(
 
 const STEPS = ["pending", "accepted", "collected", "in_transit", "delivered"] as const;
 
-export default function ClientMissionDetailPage({
+export default function AdminMissionDetailPage({
   params,
 }: {
   params: Promise<{ id: string }> | { id: string };
@@ -37,7 +37,6 @@ export default function ClientMissionDetailPage({
   const { data: mission, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["mission", id],
     queryFn: () => missionsApi.get(id).then((r) => r.data),
-    refetchInterval: 30_000,
   });
 
   if (isLoading || (!mission && !isError)) {
@@ -54,7 +53,7 @@ export default function ClientMissionDetailPage({
     return (
       <div className="space-y-6">
         <Button variant="ghost" size="icon" asChild>
-          <Link href="/client/missions">
+          <Link href="/admin/missions">
             <ArrowLeft className="size-4" />
           </Link>
         </Button>
@@ -68,7 +67,7 @@ export default function ClientMissionDetailPage({
           <CardContent>
             <Button onClick={() => refetch()}>{t("common.tryAgain") || "Try again"}</Button>
             <Button variant="outline" asChild className="ml-2">
-              <Link href="/client/missions">{t("mission.myMissions") || "My missions"}</Link>
+              <Link href="/admin/missions">{t("admin.missions")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -83,7 +82,7 @@ export default function ClientMissionDetailPage({
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild>
-          <Link href="/client/missions">
+          <Link href="/admin/missions">
             <ArrowLeft className="size-4" />
           </Link>
         </Button>
@@ -93,7 +92,6 @@ export default function ClientMissionDetailPage({
         </div>
       </div>
 
-      {/* Timeline stepper */}
       {!isCancelled && (
         <Card>
           <CardHeader>
@@ -178,13 +176,25 @@ export default function ClientMissionDetailPage({
             </CardContent>
           </Card>
 
+          {mission.client && (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("admin.client") || "Client"}</CardTitle>
+                <CardDescription>
+                  {mission.client.first_name} {mission.client.last_name} · {mission.client.email}
+                </CardDescription>
+              </CardHeader>
+              <CardContent />
+            </Card>
+          )}
+
           {mission.partner && (
             <Card>
               <CardHeader>
                 <CardTitle>{t("missionDetail.partner")}</CardTitle>
                 <CardDescription>{mission.partner.first_name} {mission.partner.last_name}</CardDescription>
               </CardHeader>
-              <CardContent className="flex gap-2">
+              <CardContent>
                 <Button variant="outline" size="sm" asChild>
                   <a
                     href={`https://www.google.com/maps/dir/?api=1&destination=${mission.delivery_lat},${mission.delivery_lng}`}
@@ -194,10 +204,6 @@ export default function ClientMissionDetailPage({
                     <Navigation className="mr-2 size-4" />
                     {t("missionDetail.directions")}
                   </a>
-                </Button>
-                <Button variant="outline" size="sm" disabled>
-                  <MessageCircle className="mr-2 size-4" />
-                  {t("missionDetail.chatSoon")}
                 </Button>
               </CardContent>
             </Card>

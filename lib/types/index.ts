@@ -93,6 +93,8 @@ export interface Dispute {
   raised_by: string;
   reason: string;
   status: "open" | "in_review" | "resolved";
+  resolution?: string | null;
+  resolved_by?: string | null;
   created_at: string;
   resolved_at?: string | null;
 }

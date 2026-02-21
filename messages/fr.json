@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "Chargement…",
+    "tryAgain": "Réessayer",
     "created": "Créé",
     "actions": "Actions",
     "photo": "Photo",
@@ -110,6 +111,7 @@
     "missionCancelled": "Mission annulée",
     "missionCreated": "Mission créée !",
     "createFailed": "Échec de création de la mission",
+    "paymentsNotConfigured": "Les paiements ne sont pas configurés. Vous pouvez consulter votre mission ci-dessous.",
     "availableNearby": "Missions à proximité",
     "accept": "Accepter",
     "noAvailableMissions": "Aucune mission disponible à proximité.",
@@ -161,6 +163,7 @@
     "resolve": "Résoudre",
     "resolveDispute": "Résoudre le litige",
     "resolutionNotes": "Notes de résolution…",
+    "resolution": "Résolution",
     "submitResolution": "Envoyer la résolution",
     "disputeResolved": "Litige résolu",
     "resolveFailed": "Échec de résolution",
@@ -168,13 +171,22 @@
     "stats": "Statistiques",
     "totalUsers": "Utilisateurs totaux",
     "activeMissions": "Missions actives",
-    "revenue": "Revenus"
+    "revenue": "Revenus",
+    "showingXOfY": "Affichage {from}–{to} sur {total}",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "perPage": "Par page",
+    "client": "Client",
+    "userDetails": "Détails utilisateur",
+    "disputeDetails": "Détails du litige",
+    "resolvedAt": "Résolu le"
   },
   "profile": {
     "firstName": "Prénom",
     "lastName": "Nom",
     "phone": "Téléphone",
     "address": "Adresse",
+    "savedAddress": "Adresse enregistrée",
     "updateProfile": "Mettre à jour le profil",
     "profileUpdated": "Profil mis à jour",
     "personalInfo": "Informations personnelles",
@@ -184,6 +196,8 @@
     "saving": "Enregistrement…",
     "saveChanges": "Enregistrer les modifications",
     "updateFailed": "Échec de la mise à jour",
+    "emailReadOnly": "L'email ne peut pas être modifié.",
+    "addressOptional": "Optionnel",
     "payoutSettings": "Paramètres de paiement",
     "connectStripeReceivePayments": "Connectez votre compte Stripe pour recevoir les paiements",
     "stripeConnected": "Stripe connecté",
@@ -207,7 +221,9 @@
     "directions": "Itinéraire",
     "chatSoon": "Chat (bientôt)",
     "qrCode": "QR Code",
-    "qrCodeDescription": "Le partenaire scanne ce code pour confirmer collecte/livraison"
+    "qrCodeDescription": "Le partenaire scanne ce code pour confirmer collecte/livraison",
+    "notFound": "Mission introuvable",
+    "notFoundDescription": "Cette mission n'existe pas ou vous n'avez pas accès."
   },
   "newMission": {
     "packageTitlePlaceholder": "ex. Documents",
@@ -235,12 +251,26 @@
   },
   "partnerAvailable": {
     "availableMissions": "Missions disponibles",
-    "missionsWithin1km": "Missions dans un rayon d'environ 1 km. Autorisez la localisation.",
+    "missionsWithin1km": "Missions dans un rayon d'environ 1 km.",
     "availableMissionsNearYou": "Missions disponibles près de chez vous",
     "list": "Liste",
     "acceptMissionToStart": "Acceptez une mission pour commencer à livrer",
     "gettingLocation": "Obtention de votre position…",
-    "acceptFailed": "Échec de l'acceptation"
+    "acceptFailed": "Échec de l'acceptation",
+    "locationRequired": "Pour afficher les missions près de chez vous, nous avons besoin de votre position.",
+    "locationRequiredHint": "Votre position sert uniquement à trouver les missions à proximité.",
+    "allowLocation": "Autoriser la localisation",
+    "locationDenied": "La localisation a été refusée. Autorisez-la dans les paramètres du navigateur et réessayez.",
+    "locationUnavailable": "La localisation n'est pas disponible sur cet appareil.",
+    "locationFallback": "Utilisation de Paris (France) par défaut (démo uniquement). Activez la localisation pour voir les missions près de chez vous.",
+    "locationFallbackNote": "Démo : affichage des missions près de Paris. Activez la localisation pour votre position réelle.",
+    "viewDetails": "Voir les détails",
+    "confirmPickup": "Prendre en charge cette mission ?",
+    "confirmPickupDescription": "Vous serez assigné à cette livraison. Vous pouvez annuler dans les 30 secondes si vous changez d'avis.",
+    "yesPickUp": "Oui, prendre en charge",
+    "cancelAcceptance": "Annuler l'acceptation",
+    "cancelWithin30s": "Vous avez {seconds} s pour annuler si vous changez d'avis.",
+    "acceptanceCancelled": "Acceptation annulée. La mission est à nouveau disponible."
   },
   "adminDashboard": {
     "adminDashboard": "Tableau de bord admin",
@@ -258,7 +288,24 @@
   "settings": {
     "platformSettings": "Paramètres de la plateforme",
     "configureGlobalPlaceholder": "Configurer les options globales (placeholder)",
-    "settingsUICanBeExtended": "L'interface peut être étendue avec indicateurs, tarifs et notifications."
+    "settingsUICanBeExtended": "L'interface peut être étendue avec indicateurs, tarifs et notifications.",
+    "apiKeys": "Clés API",
+    "apiKeysDescription": "Les clés sont lues depuis les variables d'environnement. Activez ou désactivez chaque intégration.",
+    "stripeKey": "Clé publique Stripe",
+    "googleMapsKey": "Clé API Google Maps",
+    "notSet": "Non définie",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "useIntegration": "Utiliser l'intégration",
+    "indicators": "Indicateurs",
+    "indicatorsDescription": "Configurer les KPI et indicateurs du tableau de bord.",
+    "indicatorsPlaceholder": "Les indicateurs peuvent être configurés ici.",
+    "tariffs": "Tarifs",
+    "tariffsDescription": "Configurer les prix et règles de commission.",
+    "tariffsPlaceholder": "Les tarifs et commissions peuvent être configurés ici.",
+    "notifications": "Notifications",
+    "notificationsDescription": "Configurer les notifications par e-mail et in-app.",
+    "notificationsPlaceholder": "Les préférences et modèles de notification peuvent être configurés ici."
   },
   "register": {
     "createAccount": "Créer un compte",

@@ -27,19 +27,39 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
 import { adminApi } from "@/lib/api/endpoints";
 import { useTranslation } from "@/lib/i18n";
-import { MoreHorizontal, UserX, Trash2 } from "lucide-react";
+import { formatDate } from "@/lib/utils/format";
+import type { User } from "@/lib/types";
+import { MoreHorizontal, UserX, Trash2, ChevronLeft, ChevronRight, Eye } from "lucide-react";
+
+const PAGE_SIZE_OPTIONS = [10, 15, 20] as const;
 
 export default function AdminUsersPage() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [roleFilter, setRoleFilter] = useState("all");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState<number>(15);
+  const [detailUser, setDetailUser] = useState<User | null>(null);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["admin-users", roleFilter === "all" ? undefined : roleFilter],
+    queryKey: ["admin-users", roleFilter === "all" ? undefined : roleFilter, page, limit],
     queryFn: () =>
-      adminApi.users({ role: roleFilter === "all" ? undefined : roleFilter }).then((r) => r.data),
+      adminApi
+        .users({
+          role: roleFilter === "all" ? undefined : roleFilter,
+          page,
+          limit,
+        })
+        .then((r) => r.data),
   });
 
   const suspendMutation = useMutation({
@@ -65,6 +85,22 @@ export default function AdminUsersPage() {
   });
 
   const users = data?.data ?? [];
+  const total = data?.total ?? 0;
+  const currentPage = data?.page ?? 1;
+  const pageLimit = data?.limit ?? limit;
+  const totalPages = Math.max(1, Math.ceil(total / pageLimit));
+  const from = total === 0 ? 0 : (currentPage - 1) * pageLimit + 1;
+  const to = Math.min(currentPage * pageLimit, total);
+
+  const handleRoleChange = (value: string) => {
+    setRoleFilter(value);
+    setPage(1);
+  };
+
+  const handleLimitChange = (value: string) => {
+    setLimit(Number(value));
+    setPage(1);
+  };
 
   return (
     <div className="space-y-6">
@@ -73,17 +109,31 @@ export default function AdminUsersPage() {
         <CardHeader>
           <CardTitle>{t("admin.allUsers")}</CardTitle>
           <CardDescription>{t("admin.manageAccounts")}</CardDescription>
-          <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder={t("admin.role")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("common.all")}</SelectItem>
-              <SelectItem value="client">{t("adminUsers.clientRole")}</SelectItem>
-              <SelectItem value="partner">{t("adminUsers.partnerRole")}</SelectItem>
-              <SelectItem value="admin">{t("adminUsers.adminRole")}</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex flex-wrap items-center gap-4">
+            <Select value={roleFilter} onValueChange={handleRoleChange}>
+              <SelectTrigger className="w-[140px]">
+                <SelectValue placeholder={t("admin.role")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("common.all")}</SelectItem>
+                <SelectItem value="client">{t("adminUsers.clientRole")}</SelectItem>
+                <SelectItem value="partner">{t("adminUsers.partnerRole")}</SelectItem>
+                <SelectItem value="admin">{t("adminUsers.adminRole")}</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={String(limit)} onValueChange={handleLimitChange}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder={t("admin.perPage")} />
+              </SelectTrigger>
+              <SelectContent>
+                {PAGE_SIZE_OPTIONS.map((n) => (
+                  <SelectItem key={n} value={String(n)}>
+                    {n}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -118,6 +168,10 @@ export default function AdminUsersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => setDetailUser(u)}>
+                            <Eye className="mr-2 size-4" />
+                            {t("common.view")}
+                          </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => suspendMutation.mutate(u.id)}
                             disabled={suspendMutation.isPending}
@@ -140,6 +194,69 @@ export default function AdminUsersPage() {
                 ))}
               </TableBody>
             </Table>
+          )}
+
+          <Sheet open={!!detailUser} onOpenChange={(open) => !open && setDetailUser(null)}>
+            <SheetContent side="right" className="sm:max-w-md">
+              <SheetHeader>
+                <SheetTitle>{t("admin.userDetails") || "User details"}</SheetTitle>
+                <SheetDescription>
+                  {detailUser ? `${detailUser.first_name} ${detailUser.last_name}` : ""}
+                </SheetDescription>
+              </SheetHeader>
+              {detailUser && (
+                <div className="mt-6 space-y-4">
+                  <p><strong>{t("adminUsers.name")}:</strong> {detailUser.first_name} {detailUser.last_name}</p>
+                  <p><strong>{t("auth.email")}:</strong> {detailUser.email}</p>
+                  <p><strong>{t("admin.role")}:</strong> <Badge variant="secondary">{detailUser.role}</Badge></p>
+                  {detailUser.phone != null && detailUser.phone !== "" && (
+                    <p><strong>{t("profile.phone")}:</strong> {detailUser.phone}</p>
+                  )}
+                  {(detailUser as { address?: string | null }).address != null && (detailUser as { address?: string | null }).address !== "" && (
+                    <p><strong>{t("profile.address")}:</strong> {(detailUser as { address?: string }).address}</p>
+                  )}
+                  {(detailUser as { created_at?: string }).created_at && (
+                    <p className="text-muted-foreground text-sm">
+                      {t("common.created")}: {formatDate((detailUser as { created_at: string }).created_at)}
+                    </p>
+                  )}
+                </div>
+              )}
+            </SheetContent>
+          </Sheet>
+
+          {!isLoading && total > 0 && (
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t pt-4">
+              <p className="text-muted-foreground text-sm">
+                {t("admin.showingXOfY")
+                  .replace("{from}", String(from))
+                  .replace("{to}", String(to))
+                  .replace("{total}", String(total))}
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage <= 1}
+                >
+                  <ChevronLeft className="size-4" />
+                  {t("admin.previous")}
+                </Button>
+                <span className="text-muted-foreground text-sm">
+                  {currentPage} / {totalPages}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage >= totalPages}
+                >
+                  {t("admin.next")}
+                  <ChevronRight className="size-4" />
+                </Button>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

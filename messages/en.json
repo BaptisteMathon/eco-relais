@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "Loading…",
+    "tryAgain": "Try again",
     "created": "Created",
     "actions": "Actions",
     "photo": "Photo",
@@ -110,6 +111,7 @@
     "missionCancelled": "Mission cancelled",
     "missionCreated": "Mission created!",
     "createFailed": "Failed to create mission",
+    "paymentsNotConfigured": "Payments are not configured. You can view your mission below.",
     "availableNearby": "Missions nearby",
     "accept": "Accept",
     "noAvailableMissions": "No missions available nearby.",
@@ -161,6 +163,7 @@
     "resolve": "Resolve",
     "resolveDispute": "Resolve dispute",
     "resolutionNotes": "Resolution notes…",
+    "resolution": "Resolution",
     "submitResolution": "Submit resolution",
     "disputeResolved": "Dispute resolved",
     "resolveFailed": "Failed to resolve",
@@ -168,13 +171,22 @@
     "stats": "Statistics",
     "totalUsers": "Total users",
     "activeMissions": "Active missions",
-    "revenue": "Revenue"
+    "revenue": "Revenue",
+    "showingXOfY": "Showing {from}–{to} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "perPage": "Per page",
+    "client": "Client",
+    "userDetails": "User details",
+    "disputeDetails": "Dispute details",
+    "resolvedAt": "Resolved at"
   },
   "profile": {
     "firstName": "First name",
     "lastName": "Last name",
     "phone": "Phone",
     "address": "Address",
+    "savedAddress": "Saved address",
     "updateProfile": "Update profile",
     "profileUpdated": "Profile updated",
     "personalInfo": "Personal information",
@@ -184,6 +196,8 @@
     "saving": "Saving…",
     "saveChanges": "Save changes",
     "updateFailed": "Update failed",
+    "emailReadOnly": "Email cannot be changed.",
+    "addressOptional": "Optional",
     "payoutSettings": "Payout settings",
     "connectStripeReceivePayments": "Connect your Stripe account to receive payments",
     "stripeConnected": "Stripe connected",
@@ -207,7 +221,9 @@
     "directions": "Directions",
     "chatSoon": "Chat (soon)",
     "qrCode": "QR Code",
-    "qrCodeDescription": "Partner scans this to confirm collection/delivery"
+    "qrCodeDescription": "Partner scans this to confirm collection/delivery",
+    "notFound": "Mission not found",
+    "notFoundDescription": "This mission does not exist or you don't have access."
   },
   "newMission": {
     "packageTitlePlaceholder": "e.g. Documents",
@@ -235,12 +251,26 @@
   },
   "partnerAvailable": {
     "availableMissions": "Available Missions",
-    "missionsWithin1km": "Missions within ~1 km. Allow location access to see nearby missions.",
+    "missionsWithin1km": "Missions within ~1 km of your location.",
     "availableMissionsNearYou": "Available missions near you",
     "list": "List",
     "acceptMissionToStart": "Accept a mission to start delivering",
     "gettingLocation": "Getting your location…",
-    "acceptFailed": "Failed to accept"
+    "acceptFailed": "Failed to accept",
+    "locationRequired": "To see missions near you, we need your location.",
+    "locationRequiredHint": "Your location is only used to find nearby missions and is not shared.",
+    "allowLocation": "Allow location",
+    "locationDenied": "Location was denied. Allow it in your browser settings and try again.",
+    "locationUnavailable": "Location is not available on this device.",
+    "locationFallback": "Using Paris, France as fallback (demo only). Enable location to see missions near you.",
+    "locationFallbackNote": "Demo: showing missions near Paris. Enable location for your real position.",
+    "viewDetails": "View details",
+    "confirmPickup": "Pick up this mission?",
+    "confirmPickupDescription": "You will be assigned to this delivery. You can cancel within 30 seconds if you change your mind.",
+    "yesPickUp": "Yes, pick up",
+    "cancelAcceptance": "Cancel acceptance",
+    "cancelWithin30s": "You have {seconds}s to cancel if you change your mind.",
+    "acceptanceCancelled": "Acceptance cancelled. Mission is available again."
   },
   "adminDashboard": {
     "adminDashboard": "Admin Dashboard",
@@ -258,7 +288,24 @@
   "settings": {
     "platformSettings": "Platform settings",
     "configureGlobalPlaceholder": "Configure global options (placeholder)",
-    "settingsUICanBeExtended": "Settings UI can be extended with feature flags, pricing, and notifications."
+    "settingsUICanBeExtended": "Settings UI can be extended with feature flags, pricing, and notifications.",
+    "apiKeys": "API keys",
+    "apiKeysDescription": "Keys are read from environment variables. Toggle to enable or disable each integration.",
+    "stripeKey": "Stripe publishable key",
+    "googleMapsKey": "Google Maps API key",
+    "notSet": "Not set",
+    "active": "Active",
+    "inactive": "Inactive",
+    "useIntegration": "Use integration",
+    "indicators": "Indicators",
+    "indicatorsDescription": "Configure platform KPIs and dashboard indicators.",
+    "indicatorsPlaceholder": "Indicator settings can be extended here (e.g. which metrics to show on the admin dashboard).",
+    "tariffs": "Tariffs",
+    "tariffsDescription": "Configure pricing and commission rules.",
+    "tariffsPlaceholder": "Tariff and commission settings can be extended here.",
+    "notifications": "Notifications",
+    "notificationsDescription": "Configure email and in-app notifications.",
+    "notificationsPlaceholder": "Notification preferences and templates can be configured here."
   },
   "register": {
     "createAccount": "Create an account",
